@@ -34,7 +34,7 @@ export default class UnitKerjaController {
     unitKerja.merge(request.only(['nama_unit', 'lokasi']))
     await unitKerja.save()
     session.flash('success', 'Unit Kerja berhasil diperbarui')
-    return response.redirect().toRoute('unitKerja.index')
+    return response.redirect().toRoute('unitkerja.index')
   }
 
   async destroy({ params, response, session }: HttpContext) {
