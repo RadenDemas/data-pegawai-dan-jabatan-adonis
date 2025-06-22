@@ -1,0 +1,43 @@
+@layout.app({ title: 'Ajukan Cuti' })
+  @slot('main')
+    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+      <h1 class="text-2xl font-bold mb-4">
+        Ajukan Cuti
+      </h1>
+
+      <form method="POST" action="{{ route('cuti.store') }}">
+        {{ csrfField() }}
+        <div class="mb-4">
+          <label class="block mb-1 font-medium">Pegawai</label>
+          <select name="pegawai_id" class="select select-bordered w-full" required>
+            <option value="">
+              Pilih Pegawai
+            </option>
+            @each(pegawai in pegawais)
+              <option value="{{ pegawai.id }}">
+                {{ pegawai.nama }}
+              </option>
+            @endeach
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="block mb-1 font-medium">Tanggal Mulai</label>
+          <input type="date" name="tanggal_mulai" class="input input-bordered w-full" required />
+        </div>
+
+        <div class="mb-4">
+          <label class="block mb-1 font-medium">Tanggal Akhir</label>
+          <input type="date" name="tanggal_akhir" class="input input-bordered w-full" required />
+        </div>
+
+        <div class="mb-4">
+          <label class="block mb-1 font-medium">Alasan</label>
+          <textarea name="alasan" class="textarea textarea-bordered w-full" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ajukan</button>
+      </form>
+    </div>
+  @endslot
+@end

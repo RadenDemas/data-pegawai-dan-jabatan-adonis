@@ -1,0 +1,57 @@
+@layout.app({ title: 'Data Jabatan' })
+
+  @slot('main')
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">
+        Daftar Jabatan
+      </h1>
+      <a href="{{ route('jabatan.create') }}" class="btn btn-primary">        <i class="fa-solid fa-plus"></i>Tambah Jabatan</a>
+    </div>
+
+    <table class="table w-full text-sm">
+      <thead>
+        <tr>
+          <th>
+            No
+          </th>
+          <th>
+            Nama Jabatan
+          </th>
+          <th>
+            Tunjangan
+          </th>
+          <th>
+            Aksi
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((jabatan,loop) in jabatans)
+          <tr>
+            <td>
+              {{ loop + 1 }}
+            </td>
+            <td>
+              {{ jabatan.nama_jabatan }}
+            </td>
+            <td>
+              Rp{{ jabatan.tunjangan }}
+            </td>
+            <td class="flex gap-2">
+              <a href="{{ route('jabatan.edit', { id: jabatan.id }) }}" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-pen-to-square"></i>Edit
+          </a>
+              <form method="POST" action="{{ route('jabatan.destroy', { id: jabatan.id }) }}">
+                {{ csrfField() }}
+            <input type="hidden" name="_method" value="DELETE" />
+                <button type="submit" class="btn btn-sm btn-error">
+                  <i class="fa-solid fa-trash"></i>Hapus
+            </button>
+              </form>
+            </td>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+  @endslot
+@end

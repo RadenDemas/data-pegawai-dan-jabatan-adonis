@@ -1,0 +1,35 @@
+@layout.auth({ title: 'Login' })
+
+  @slot('main')
+    <h1 class="text-3xl font-bold mb-6 text-center">
+      Login
+    </h1>
+
+    @if (session.get('error'))
+      <div class="alert alert-error mb-4">
+        {{ session.get('error') }}
+      </div>
+    @endif
+    
+    <form method="POST" action="{{ route('login') }}" class="space-y-4">
+      {{ csrfField() }}
+      <div>
+        <label class="label" for="email">Email</label>
+        <input type="email" name="email" id="email" class="input input-bordered w-full" required autofocus />
+      </div>
+
+      <div>
+        <label class="label" for="password">Password</label>
+        <input type="password" name="password" id="password" class="input input-bordered w-full" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full">
+        <i class="fa-solid fa-right-to-bracket mr-2"></i>Login
+      </button>
+    </form>
+
+    <p class="mt-4 text-center text-sm">
+      Belum punya akun? <a href="{{ route('register.show') }}" class="link link-primary">Daftar</a>
+    </p>
+  @endslot
+@end

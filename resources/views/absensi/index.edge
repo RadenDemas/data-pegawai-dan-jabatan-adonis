@@ -1,0 +1,89 @@
+@layout.app({ title: 'Rekap Absensi' })
+  @slot('main')
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">
+        Rekap Absensi
+      </h1>
+      <form method="GET" action="{{ route('absensi.index') }}">
+        <input
+          type="date"
+          name="tanggal"
+          value="{{ tanggal }}"
+          class="input input-bordered"
+          onchange="this.form.submit()"
+        />
+      </form>
+    </div>
+    <form method="GET" action="{{ route('absensi.index') }}" class="mb-4 flex gap-2">
+      <input
+        type="text"
+        name="search"
+        class="input input-bordered w-full"
+        placeholder="Cari nama pegawai..."
+        value=""
+      />
+      <button type="submit" class="btn btn-primary">Cari</button>
+    </form>
+
+    <table class="table table-zebra w-full text-sm">
+      <thead>
+        <tr>
+          <th>
+            Nama Pegawai
+          </th>
+          <th>
+            Status
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(pegawai in pegawais)
+          <tr>
+            <td>
+              {{ pegawai.nama }}
+            </td>
+            <td>
+              @if(pegawai.absensis.length)
+                @let(status = pegawai.absensis[0].status)
+
+                <span
+                  class="
+                  badge capitalize
+                  {{ status == 'hadir' ? 'badge-success' :
+                    status == 'cuti' ? 'badge-neutral' :
+                    status == 'izin' ? 'badge-info' :
+                    status == 'sakit' ? 'badge-warning' :
+                    'badge-error' }}
+                "
+                >
+                  {{ status.replace('_', ' ') }}
+                </span>
+              @else
+                <span class="badge badge-outline">Belum Diisi</span>
+              @endif
+            </td>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+    <div class="mt-6 flex justify-center">
+      <div class="join">
+        @if (pegawais.hasPreviousPage)
+          <a href="{{ pegawais.previousPageUrl }}" class="join-item btn btn-sm">«</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">«</button>
+        @endif
+          
+        <button class="join-item btn btn-sm btn-ghost cursor-default">
+          Halaman {{ pegawais.currentPage }} dari {{ pegawais.lastPage }}
+            </button>
+
+        @if (pegawais.hasNextPage)
+          <a href="{{ pegawais.nextPageUrl }}" class="join-item btn btn-sm">»</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">»</button>
+        @endif
+      </div>
+    </div>
+  @endslot
+@end

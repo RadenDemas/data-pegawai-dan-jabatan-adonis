@@ -1,0 +1,54 @@
+@layout.app({ title: 'Dashboard' })
+
+  @slot('main')
+    <h1 class="text-3xl font-bold mb-4">
+      Dashboard
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="bg-white p-4 rounded-xl shadow flex items-center gap-4">
+        <div class="bg-blue-100 p-2 rounded-full">
+          <i class="fa-solid fa-users text-blue-500 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">
+            Total Pegawai
+          </p>
+          <h2 class="text-xl font-bold">
+            {{-- {{ totalPegawai }} --}}
+          </h2>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow flex items-center gap-4">
+        <div class="bg-green-100 p-2 rounded-full">
+          <i class="fa-solid fa-briefcase text-green-500 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">
+            Total Jabatan
+          </p>
+          <h2 class="text-xl font-bold">
+            {{-- {{ totalJabatan }} --}}
+          </h2>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow flex items-center gap-4">
+        <div class="bg-yellow-100 p-2 rounded-full">
+          <i class="fa-solid fa-building text-yellow-500 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">
+            Total Unit Kerja
+          </p>
+          <h2 class="text-xl font-bold">
+            {{-- {{ totalUnitKerja }} --}}
+          </h2>
+        </div>
+      </div>
+
+    </div>
+  @endslot
+@end

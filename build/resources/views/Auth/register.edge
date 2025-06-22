@@ -1,0 +1,40 @@
+@layout.auth({ title: 'Daftar' })
+
+  @slot('main')
+    <h1 class="text-3xl font-bold mb-6 text-center">
+      Daftar Akun
+    </h1>
+
+    @if (session.get('error'))
+      <div class="alert alert-error mb-4">
+        {{ session.get('error') }}
+      </div>
+    @endif
+    
+    <form method="POST" action="{{ route('register') }}" class="space-y-4">
+      {{ csrfField() }}
+      <div>
+        <label class="label" for="name">Nama</label>
+        <input type="text" name="name" id="name" class="input input-bordered w-full" required />
+      </div>
+
+      <div>
+        <label class="label" for="email">Email</label>
+        <input type="email" name="email" id="email" class="input input-bordered w-full" required />
+      </div>
+
+      <div>
+        <label class="label" for="password">Password</label>
+        <input type="password" name="password" id="password" class="input input-bordered w-full" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full">
+        <i class="fa-solid fa-user-plus mr-2"></i>Daftar
+      </button>
+    </form>
+
+    <p class="mt-4 text-center text-sm">
+      Sudah punya akun? <a href="{{ route('login.show') }}" class="link link-primary">Login</a>
+    </p>
+  @endslot
+@end

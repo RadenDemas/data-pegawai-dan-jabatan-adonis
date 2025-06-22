@@ -1,0 +1,99 @@
+@layout.app({ title: 'Rekap Absensi Bulanan' })
+  @slot('main')
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">
+        Rekap Absensi Bulanan
+      </h1>
+
+      <form method="GET" action="{{ route('absensi.rekap') }}">
+        <input
+          type="month"
+          name="bulan"
+          value="{{ bulan }}"
+          class="input input-bordered"
+          onchange="this.form.submit()"
+        />
+      </form>
+    </div>
+    <form method="GET" action="{{ route('absensi.rekap') }}" class="mb-4 flex gap-2">
+      <input
+        type="text"
+        name="search"
+        class="input input-bordered w-full"
+        placeholder="Cari nama pegawai..."
+        value=""
+      />
+      <button type="submit" class="btn btn-primary">Cari</button>
+    </form>
+    <div class="overflow-x-auto">
+      <table class="table table-zebra w-full text-sm">
+        <thead>
+          <tr>
+            <th>
+              Nama
+            </th>
+            <th>
+              Hadir
+            </th>
+            <th>
+              Izin
+            </th>
+            <th>
+              Sakit
+            </th>
+            <th>
+              Tidak Hadir
+            </th>
+            <th>
+              Cuti
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(pegawai in pegawais)
+            @let(rekap = rekapMap.get(pegawai.id) || {})
+            <tr>
+              <td>
+                {{ pegawai.nama }}
+              </td>
+              <td>
+                {{ rekap.hadir || 0 }}
+              </td>
+              <td>
+                {{ rekap.izin || 0 }}
+              </td>
+              <td>
+                {{ rekap.sakit || 0 }}
+              </td>
+              <td>
+                {{ rekap.tidak_hadir || 0 }}
+              </td>
+              <td>
+                {{ rekap.cuti || 0 }}
+              </td>
+            </tr>
+          @endeach
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-6 flex justify-center">
+      <div class="join">
+        @if (pegawais.hasPreviousPage)
+          <a href="{{ pegawais.previousPageUrl }}" class="join-item btn btn-sm">«</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">«</button>
+        @endif
+          
+        <button class="join-item btn btn-sm btn-ghost cursor-default">
+          Halaman {{ pegawais.currentPage }} dari {{ pegawais.lastPage }}
+            </button>
+
+        @if (pegawais.hasNextPage)
+          <a href="{{ pegawais.nextPageUrl }}" class="join-item btn btn-sm">»</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">»</button>
+        @endif
+      </div>
+    </div>
+  @endslot
+@end

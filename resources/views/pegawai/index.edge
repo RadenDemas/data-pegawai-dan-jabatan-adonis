@@ -1,0 +1,113 @@
+@layout.app({ title: 'Data Pegawai' })
+  @slot('main')
+    <div class="mb-4 flex justify-between">
+      <h1 class="text-2xl font-bold">
+        Data Pegawai
+      </h1>
+      <a href="{{ route('pegawai.create') }}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i>Tambah Pegawai
+      </a>
+    </div>
+    <form method="GET" action="{{ route('pegawai.index') }}" class="mb-4 flex gap-2">
+      <input
+        type="text"
+        name="search"
+        class="input input-bordered w-full"
+        placeholder="Cari nama pegawai..."
+        value=""
+      />
+      <button type="submit" class="btn btn-primary">Cari</button>
+    </form>
+    @if(flashMessages.has('success'))
+      <div class="alert alert-success mb-4">
+        {{ flashMessages.get('success') }}
+      </div>
+    @endif
+    
+    <table class="table table-zebra w-full text-sm">
+      <thead>
+        <tr>
+          <th>
+            #
+          </th>
+          <th>
+            NIP
+          </th>
+          <th>
+            Nama
+          </th>
+          <th>
+            Jabatan
+          </th>
+          <th>
+            Unit Kerja
+          </th>
+          <th>
+            Gaji
+          </th>
+          <th>
+            Aksi
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(pegawai in pegawais)
+          <tr>
+            <td>
+              {{ pegawai.id }}
+            </td>
+            <td>
+              {{ pegawai.nip }}
+            </td>
+            <td>
+              {{ pegawai.nama }}
+            </td>
+            <td>
+              {{ pegawai.jabatan?.nama_jabatan }}
+            </td>
+            <td>
+              {{ pegawai.unitKerja?.nama_unit }}
+            </td>
+            <td>
+              Rp {{ parseFloat(pegawai.gaji).toLocaleString('id-ID') }}
+            </td>
+            <td>
+              <a href="{{ route('pegawai.edit', { id: pegawai.id }) }}" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-pen-to-square"></i>Edit
+              </a>
+              <form
+                method="POST"
+                action="{{ route('pegawai.destroy', { id: pegawai.id }) }}?_method=DELETE"
+                class="inline"
+              >
+                {{ csrfField() }}
+                <button type="submit" class="btn btn-error btn-sm">
+                  <i class="fa-solid fa-trash"></i>Hapus
+                </button>
+              </form>
+            </td>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+    <div class="mt-6 flex justify-center">
+      <div class="join">
+        @if (pegawais.hasPreviousPage)
+          <a href="{{ pegawais.previousPageUrl }}" class="join-item btn btn-sm">«</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">«</button>
+        @endif
+        
+        <button class="join-item btn btn-sm btn-ghost cursor-default">
+          Halaman {{ pegawais.currentPage }} dari {{ pegawais.lastPage }}
+          </button>
+
+        @if (pegawais.hasNextPage)
+          <a href="{{ pegawais.nextPageUrl }}" class="join-item btn btn-sm">»</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">»</button>
+        @endif
+      </div>
+    </div>
+  @endslot
+@end

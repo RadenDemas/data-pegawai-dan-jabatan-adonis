@@ -1,0 +1,98 @@
+@layout.app({ title: 'Daftar Cuti' })
+  @slot('main')
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">
+        Daftar Cuti
+      </h1>
+      <a href="{{ route('cuti.create') }}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i>Ajukan Cuti
+      </a>
+    </div>
+    <form method="GET" action="{{ route('absensi.rekap') }}" class="mb-4 flex gap-2">
+      <input
+        type="text"
+        name="search"
+        class="input input-bordered w-full"
+        placeholder="Cari nama pegawai..."
+        value=""
+      />
+      <button type="submit" class="btn btn-primary">Cari</button>
+    </form>
+    <table class="table table-zebra w-full text-sm">
+      <thead>
+        <tr>
+          <th>
+            #
+          </th>
+          <th>
+            Pegawai
+          </th>
+          <th>
+            Tanggal
+          </th>
+          <th>
+            Jumlah Hari
+          </th>
+          <th>
+            Alasan
+          </th>
+          <th>
+            Aksi
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @each((cuti,loop) in cutis)
+          <tr>
+            <td>
+              {{ loop + 1 }}
+            </td>
+            <td>
+              {{ cuti.pegawai.nama }}
+            </td>
+            <td>
+              {{ cuti.tanggalMulai.toFormat('dd LLLL yyyy') }} -
+              {{ cuti.tanggalAkhir.toFormat('dd LLLL yyyy') }}
+            </td>
+            <td>
+              {{ cuti.jumlahHari }} hari
+            </td>
+            <td>
+              {{ cuti.alasan }}
+            </td>
+            <td class="flex gap-2">
+              <a href="{{ route('cuti.edit', { id: cuti.id }) }}" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-pen-to-square"></i>Edit
+              </a>
+              <form method="POST" action="{{ route('cuti.destroy', { id: cuti.id }) }}?_method=DELETE">
+                {{ csrfField() }}
+                <button type="submit" class="btn btn-error btn-sm">
+                  <i class="fa-solid fa-trash"></i>Hapus
+                </button>
+              </form>
+            </td>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+    <div class="mt-6 flex justify-center">
+      <div class="join">
+        @if (cutis.hasPreviousPage)
+          <a href="{{ cutis.previousPageUrl }}" class="join-item btn btn-sm">«</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">«</button>
+        @endif
+            
+        <button class="join-item btn btn-sm btn-ghost cursor-default">
+          Halaman {{ cutis.currentPage }} dari {{ cutis.lastPage }}
+              </button>
+
+        @if (cutis.hasNextPage)
+          <a href="{{ cutis.nextPageUrl }}" class="join-item btn btn-sm">»</a>
+        @else
+          <button class="join-item btn btn-sm btn-disabled">»</button>
+        @endif
+      </div>
+    </div>
+  @endslot
+@end

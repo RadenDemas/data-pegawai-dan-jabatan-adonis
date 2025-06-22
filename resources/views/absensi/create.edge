@@ -1,0 +1,62 @@
+@layout.app({ title: 'Absensi Hari Ini' })
+  @slot('main')
+    <h1 class="text-2xl font-bold mb-4">
+      Absensi Hari Ini ({{ tanggal }})
+    </h1>
+
+    <form method="POST" action="{{ route('absensi.store') }}">
+      {{ csrfField() }}
+      <input type="hidden" name="tanggal" value="{{ tanggal }}" />
+
+      <table class="table w-full mb-4">
+        <thead>
+          <tr>
+            <th>
+              Nama Pegawai
+            </th>
+            <th>
+              Status
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @each((pegawai, loop) in pegawais)
+            @let(lastAbsensi = pegawai.absensis.length ? pegawai.absensis[0].status : null)
+            <tr>
+              <td>
+                {{ pegawai.nama }}
+              </td>
+              <td>
+                @if(pegawai.cutis.length)
+                  <span class="badge badge-neutral">Cuti</span>
+                  <input type="hidden" name="absensi[{{ loop }}][status]" value="cuti" />
+                  <input type="hidden" name="absensi[{{ loop }}][pegawai_id]" value="{{ pegawai.id }}" />
+                @else
+                  <div class="flex gap-2 flex-wrap">
+                    @each(status in ['hadir', 'sakit', 'izin', 'tidak_hadir'])
+                      <label>
+                        <input
+                          type="radio"
+                          name="absensi[{{ loop }}][status]"
+                          value="{{ status }}"
+                          class="hidden peer"
+                          {{ lastAbsensi == status ? 'checked' : '' }}
+                        />
+                        <span class="px-3 py-1 rounded border cursor-pointer peer-checked:bg-primary peer-checked:text-white">
+                          {{ status }}
+                        </span>
+                      </label>
+                    @end
+                    <input type="hidden" name="absensi[{{ loop }}][pegawai_id]" value="{{ pegawai.id }}" />
+                  </div>
+                @endif
+              </td>
+            </tr>
+          @endeach
+        </tbody>
+      </table>
+
+      <button type="submit" class="btn btn-primary">        <i class="fa-solid fa-save"></i>Simpan Absensi</button>
+    </form>
+  @endslot
+@end

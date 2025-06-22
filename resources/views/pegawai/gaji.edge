@@ -1,0 +1,75 @@
+@layout.app({ title: 'Data Gaji Pegawai' })
+  @slot('main')
+    <h1 class="text-2xl font-bold mb-4">
+      Data Gaji Pegawai
+    </h1>
+    <form method="GET" action="{{ route('pegawai.index') }}" class="mb-4 flex gap-2">
+      <input
+        type="text"
+        name="search"
+        class="input input-bordered w-full"
+        placeholder="Cari nama pegawai..."
+        value=""
+      />
+      <button type="submit" class="btn btn-primary">Cari</button>
+    </form>
+    <div class="overflow-x-auto">
+      <table class="table table-zebra w-full text-sm">
+        <thead>
+          <tr>
+            <th>
+              Nama
+            </th>
+            <th>
+              Gaji Pokok
+            </th>
+            <th>
+              Tunjangan
+            </th>
+            <th>
+              Total
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(pegawai in pegawais)
+            <tr>
+              <td>
+                {{ pegawai.nama }}
+              </td>
+              <td>
+                Rp{{ parseFloat(pegawai.gaji).toLocaleString('id-ID') }}
+              </td>
+              <td>
+                Rp{{ (parseFloat(pegawai.jabatan?.tunjangan || 0)).toLocaleString('id-ID') }}
+              </td>
+              <td>
+                Rp{{ (parseFloat(pegawai.gaji) + parseFloat(pegawai.jabatan?.tunjangan || 0)).toLocaleString('id-ID') }}
+              </td>
+            </tr>
+          @endeach
+        </tbody>
+      </table>
+      <div class="mt-6 flex justify-center">
+        <div class="join">
+          @if (pegawais.hasPreviousPage)
+            <a href="{{ pegawais.previousPageUrl }}" class="join-item btn btn-sm">«</a>
+          @else
+            <button class="join-item btn btn-sm btn-disabled">«</button>
+          @endif
+          
+          <button class="join-item btn btn-sm btn-ghost cursor-default">
+            Halaman {{ pegawais.currentPage }} dari {{ pegawais.lastPage }}
+          </button>
+
+          @if (pegawais.hasNextPage)
+            <a href="{{ pegawais.nextPageUrl }}" class="join-item btn btn-sm">»</a>
+          @else
+            <button class="join-item btn btn-sm btn-disabled">»</button>
+          @endif
+        </div>
+      </div>
+
+    </div>
+  @endslot
+@end
